@@ -842,3 +842,71 @@
     height: 38px;
   }
 }
+
+/* =========================================================
+   GitHub layout fix — stable feedback and short-screen scrolling
+   ========================================================= */
+.dream-gate {
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  min-height: 100svh;
+  min-height: 100dvh;
+}
+
+.dream-main {
+  flex: 0 0 auto;
+  min-height: calc(100svh - 82px);
+  min-height: calc(100dvh - 82px);
+  padding-bottom: max(84px, 10vh);
+}
+
+.dream-form {
+  scroll-margin-top: 110px;
+  scroll-margin-bottom: 90px;
+}
+
+.dream-feedback.is-hiding {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  transform: translateY(-7px) !important;
+}
+
+/* Laptop windows, landscape phones, and embedded browser previews can be
+   very short. Keep the composition intact, but let the document scroll. */
+@media (max-height: 760px) and (min-width: 761px) {
+  .dream-header {
+    padding-top: 18px;
+    padding-bottom: 8px;
+  }
+
+  .dream-main {
+    align-items: flex-start;
+    min-height: auto;
+    padding-top: 30px;
+    padding-bottom: 110px;
+  }
+
+  .dream-copy h1 {
+    font-size: clamp(3.9rem, 7vw, 6.6rem);
+  }
+
+  .dream-description {
+    margin-top: 22px;
+  }
+
+  .dream-form {
+    margin-top: 24px;
+    margin-bottom: 24px;
+  }
+}
+
+@media (max-width: 760px) {
+  .dream-main {
+    min-height: auto;
+    padding-bottom: max(72px, calc(46px + env(safe-area-inset-bottom)));
+  }
+
+  .dream-form {
+    margin-bottom: 18px;
+  }
+}

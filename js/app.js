@@ -13,13 +13,13 @@
   const defaultButtonArrow = buttonArrow?.textContent || "↗";
   const CONSUMED_STORAGE_KEY = "consumedInviteCodes";
   const ownerResetButton = document.getElementById("ownerResetButton");
+  let feedbackTimer = null;
 
   const normalizeCode = (value) => value.trim().toUpperCase().replace(/\s+/g, "");
 
   const consumedNotice = sessionStorage.getItem("consumedNotice");
   if (consumedNotice) {
-    formMessage.textContent = `${consumedNotice}'s message has already disappeared.`;
-    formMessage.classList.add("consumed");
+    showConsumedError(`${consumedNotice}'s message has already disappeared.`, false);
     sessionStorage.removeItem("consumedNotice");
   }
 
@@ -40,9 +40,7 @@
       sessionStorage.removeItem("consumedNotice");
 
       // Owner maintenance stays silent and separate from invitation validation.
-      formMessage.textContent = "";
-      formMessage.classList.remove("success", "consumed");
-      inputWrap.classList.remove("error", "consumed");
+      clearFeedback();
       codeInput.value = "";
       submitButton.disabled = false;
       submitButton.classList.remove("checking");
@@ -57,9 +55,7 @@
       codeInput.value = codeInput.value.toUpperCase();
       codeInput.setSelectionRange(caretPosition, caretPosition);
 
-      formMessage.textContent = "";
-      formMessage.classList.remove("success");
-      inputWrap.classList.remove("error");
+      clearFeedback();
     });
   }
 
@@ -113,6 +109,7 @@
   }
 
   function setCheckingState(isChecking) {
+    if (isChecking) clearFeedbackTimer();
     submitButton.disabled = isChecking;
     submitButton.classList.toggle("checking", isChecking);
     buttonLabel.textContent = isChecking ? "CHECKING" : defaultButtonLabel;
@@ -125,21 +122,52 @@
   }
 
   function showError(message) {
+    clearFeedbackTimer();
+    formMessage.classList.remove("is-hiding", "success", "consumed");
     formMessage.textContent = message;
-    formMessage.classList.remove("success", "consumed");
     inputWrap.classList.remove("error", "consumed");
     void inputWrap.offsetWidth;
     inputWrap.classList.add("error");
-    codeInput.focus();
+    codeInput.focus({ preventScroll: true });
+    scheduleFeedbackClear();
   }
 
-  function showConsumedError(message) {
+  function showConsumedError(message, selectInput = true) {
+    clearFeedbackTimer();
+    formMessage.classList.remove("is-hiding", "success");
     formMessage.textContent = message;
-    formMessage.classList.remove("success");
     formMessage.classList.add("consumed");
     inputWrap.classList.remove("error");
     inputWrap.classList.add("consumed");
-    codeInput.select();
+    if (selectInput && codeInput.value) {
+      codeInput.focus({ preventScroll: true });
+      codeInput.select();
+    }
+    scheduleFeedbackClear(3400);
+  }
+
+  function scheduleFeedbackClear(delay = 3000) {
+    clearFeedbackTimer();
+    feedbackTimer = window.setTimeout(() => {
+      formMessage.classList.add("is-hiding");
+      window.setTimeout(() => clearFeedback(), 260);
+    }, delay);
+  }
+
+  function clearFeedbackTimer() {
+    if (feedbackTimer !== null) {
+      window.clearTimeout(feedbackTimer);
+      feedbackTimer = null;
+    }
+  }
+
+  function clearFeedback() {
+    clearFeedbackTimer();
+    formMessage.classList.add("is-hiding");
+    formMessage.textContent = "";
+    formMessage.classList.remove("success", "consumed");
+    inputWrap.classList.remove("error", "consumed");
+    window.setTimeout(() => formMessage.classList.remove("is-hiding"), 20);
   }
 
   function isInviteConsumed(inviteCode) {
