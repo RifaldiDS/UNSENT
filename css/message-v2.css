@@ -2250,3 +2250,13 @@ body.message-erasing .theme-background {
     height: 37px;
   }
 }
+
+
+/* Page 2 brand is intentionally non-interactive for one-time reading. */
+.message-brand-static {
+  cursor: default;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-select: none;
+  text-decoration: none;
+}

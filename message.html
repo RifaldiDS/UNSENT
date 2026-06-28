@@ -3,6 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
   <meta name="description" content="A personal message, written for you." />
   <link rel="icon" type="image/png" sizes="32x32" href="assets/branding/favicon-32.png" />
   <link rel="icon" type="image/png" sizes="192x192" href="assets/branding/favicon-192.png" />
@@ -11,9 +14,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Italiana&family=Playfair+Display:ital,wght@0,600;1,500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/style.css" />
-  <link rel="stylesheet" href="css/themes.css" />
-  <link rel="stylesheet" href="css/message-v2.css" />
+  <link rel="stylesheet" href="css/style.css?v=20260629-scrollfix3" />
+  <link rel="stylesheet" href="css/themes.css?v=20260629-scrollfix3" />
+  <link rel="stylesheet" href="css/message-v2.css?v=20260629-scrollfix3" />
 </head>
 <body class="message-page" data-theme="eulalie">
   <div class="theme-background" aria-hidden="true">
@@ -30,10 +33,10 @@
   </div>
 
   <header class="message-header">
-    <a class="brand" href="index.html" aria-label="Kembali ke halaman awal">
+    <div class="brand message-brand-static" aria-label="UNSENT — private correspondence">
       <img class="message-brand-logo" src="assets/branding/unsent-mark.png" alt="" aria-hidden="true" />
       <span class="message-brand-copy"><strong>UNSENT</strong><small>private correspondence</small></span>
-    </a>
+    </div>
     <div class="header-actions" aria-hidden="true"></div>
   </header>
 
@@ -209,7 +212,7 @@
     <span>Made with honesty, not expectation.</span>
   </footer>
 
-  <script src="js/messages.js"></script>
-  <script src="js/message.js"></script>
+  <script src="js/messages.js?v=20260629-scrollfix3"></script>
+  <script src="js/message.js?v=20260629-scrollfix3"></script>
 </body>
 </html>

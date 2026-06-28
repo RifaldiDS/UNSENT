@@ -910,3 +910,122 @@
     margin-bottom: 18px;
   }
 }
+
+
+/* DEFINITIVE DOCUMENT SCROLL FIX — v3
+   The root document scrolls. The body must never become a clipped inner scroller. */
+html {
+  width: 100%;
+  min-height: 100%;
+  overflow-x: hidden !important;
+  overflow-y: scroll !important;
+  -webkit-overflow-scrolling: touch;
+}
+
+body.dream-gate {
+  width: 100%;
+  height: auto !important;
+  min-height: 100%;
+  overflow: visible !important;
+  overscroll-behavior-y: auto;
+}
+
+.dream-header {
+  flex: 0 0 auto;
+}
+
+.dream-main {
+  flex: 0 0 auto !important;
+  min-height: calc(100dvh - 82px) !important;
+  box-sizing: border-box;
+}
+
+.dream-copy,
+.dream-form,
+.dream-input {
+  flex-shrink: 0;
+}
+
+/* The field must remain part of normal document height. */
+.dream-form {
+  padding-bottom: 28px;
+}
+
+/* Short desktop windows and embedded previews need guaranteed overflow,
+   otherwise the bottom of the form can sit below the viewport without a scroll range. */
+@media (max-height: 760px) and (min-width: 761px) {
+  body.dream-gate {
+    min-height: 700px;
+  }
+
+  .dream-main {
+    min-height: 620px !important;
+    align-items: flex-start !important;
+    padding-top: 26px !important;
+    padding-bottom: 120px !important;
+  }
+
+  .dream-form {
+    padding-bottom: 44px;
+  }
+}
+
+/* Mobile and narrow previews: keep the visual world, but guarantee enough
+   document height for the invitation field and its warning. */
+@media (max-width: 760px) {
+  body.dream-gate {
+    min-height: 760px;
+  }
+
+  .dream-main {
+    min-height: 690px !important;
+    padding-bottom: max(96px, calc(70px + env(safe-area-inset-bottom))) !important;
+  }
+
+  .dream-form {
+    padding-bottom: 38px;
+  }
+}
+
+/* Very short landscape phones. */
+@media (max-height: 520px) {
+  body.dream-gate {
+    min-height: 720px;
+  }
+
+  .dream-main {
+    min-height: 640px !important;
+    padding-bottom: 120px !important;
+  }
+}
+
+/* Feedback is transient and never changes layout. */
+.dream-feedback {
+  will-change: opacity, transform;
+}
+
+.dream-feedback.is-hiding,
+.dream-feedback:empty {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+
+/* Independent visual fallback: even if a timer is delayed, warnings fade away. */
+.dream-feedback.auto-dismiss {
+  animation: feedback-auto-dismiss 2.4s ease forwards;
+}
+
+@keyframes feedback-auto-dismiss {
+  0%, 72% {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-7px);
+  }
+}

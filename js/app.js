@@ -17,6 +17,13 @@
 
   const normalizeCode = (value) => value.trim().toUpperCase().replace(/\s+/g, "");
 
+  // Clear stale feedback restored by browser back/forward cache.
+  window.addEventListener("pageshow", (event) => {
+    if (event.persisted && formMessage) {
+      clearFeedback();
+    }
+  });
+
   const consumedNotice = sessionStorage.getItem("consumedNotice");
   if (consumedNotice) {
     showConsumedError(`${consumedNotice}'s message has already disappeared.`, false);
@@ -56,6 +63,12 @@
       codeInput.setSelectionRange(caretPosition, caretPosition);
 
       clearFeedback();
+    });
+
+    codeInput.addEventListener("focus", () => {
+      window.setTimeout(() => {
+        form?.scrollIntoView({ behavior: "smooth", block: "center" });
+      }, 120);
     });
   }
 
@@ -123,8 +136,10 @@
 
   function showError(message) {
     clearFeedbackTimer();
-    formMessage.classList.remove("is-hiding", "success", "consumed");
+    formMessage.classList.remove("is-hiding", "success", "consumed", "auto-dismiss");
     formMessage.textContent = message;
+    void formMessage.offsetWidth;
+    formMessage.classList.add("auto-dismiss");
     inputWrap.classList.remove("error", "consumed");
     void inputWrap.offsetWidth;
     inputWrap.classList.add("error");
@@ -134,19 +149,21 @@
 
   function showConsumedError(message, selectInput = true) {
     clearFeedbackTimer();
-    formMessage.classList.remove("is-hiding", "success");
+    formMessage.classList.remove("is-hiding", "success", "auto-dismiss");
     formMessage.textContent = message;
     formMessage.classList.add("consumed");
+    void formMessage.offsetWidth;
+    formMessage.classList.add("auto-dismiss");
     inputWrap.classList.remove("error");
     inputWrap.classList.add("consumed");
     if (selectInput && codeInput.value) {
       codeInput.focus({ preventScroll: true });
       codeInput.select();
     }
-    scheduleFeedbackClear(3400);
+    scheduleFeedbackClear(2400);
   }
 
-  function scheduleFeedbackClear(delay = 3000) {
+  function scheduleFeedbackClear(delay = 2200) {
     clearFeedbackTimer();
     feedbackTimer = window.setTimeout(() => {
       formMessage.classList.add("is-hiding");
@@ -165,7 +182,7 @@
     clearFeedbackTimer();
     formMessage.classList.add("is-hiding");
     formMessage.textContent = "";
-    formMessage.classList.remove("success", "consumed");
+    formMessage.classList.remove("success", "consumed", "auto-dismiss");
     inputWrap.classList.remove("error", "consumed");
     window.setTimeout(() => formMessage.classList.remove("is-hiding"), 20);
   }

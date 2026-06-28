@@ -24,3 +24,7 @@ The official logo files are stored in `assets/branding/`:
 ## Important limitation
 
 This is a static frontend project. Invitation codes and one-time-read status are not protected by a backend database. The read status is stored in the visitor's browser.
+
+
+## Update
+Scroll fix v3: root-document scrolling, short-screen support, automatic warning dismissal, and cache-busted assets.
